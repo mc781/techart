@@ -1,6 +1,7 @@
 from PIL import Image
 from io import BytesIO
 from urllib.request import urlopen
+import ssl, certifi
 
 # Need to get PIL with this command: pip install pillow
 
@@ -29,7 +30,7 @@ def pixels_to_ascii(image):
     ascii_chars = []
     BUCKET_SIZE = 25  # 256 / 10 ≈ 25
 
-    pixels = image.getdata()
+    pixels = image.get_flattened_data()
     for gray_value in pixels:
         ascii_chars.append(ASCII_CHARS[gray_value // BUCKET_SIZE])
     empty_separator = ""
@@ -57,8 +58,10 @@ def read_image(path):
     """
     try:
         if path.startswith("http"):
+            # Setup ssl context to use certifi's CA bundle, potentially more forgiving
+            ctx = ssl.create_default_context(cafile=certifi.where())
             # read from the web
-            with urlopen(path) as image_stream:
+            with urlopen(path, context=ctx) as image_stream:
                 image = Image.open(BytesIO(image_stream.read()))
         else:
             # read from a file
