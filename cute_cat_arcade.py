@@ -37,13 +37,8 @@ class Cat:
         left = self.col * CELL_SIZE
         bottom = self.row * CELL_SIZE
 
-        arcade.draw_lbwh_rectangle_filled(
-            left,
-            bottom,
-            CELL_SIZE,
-            CELL_SIZE,
-            (255, 180, 200),
-        )
+        arcade.draw_lbwh_rectangle_filled(left, bottom, CELL_SIZE, CELL_SIZE, (255, 180, 200))
+
 
 
 class CatWindow(arcade.Window):
@@ -66,15 +61,8 @@ class CatWindow(arcade.Window):
             for c in range(GRID_SIZE):
                 left = c * CELL_SIZE
                 bottom = r * CELL_SIZE
-
-                arcade.draw_lbwh_rectangle_outline(
-                    left,
-                    bottom,
-                    CELL_SIZE,
-                    CELL_SIZE,
-                    (60, 60, 60),
-                )
-
+                arcade.draw_lbwh_rectangle_outline(left, bottom, CELL_SIZE, CELL_SIZE, (60, 60, 60))
+ 
         # Draw the cat
         self.cat.draw()
 
