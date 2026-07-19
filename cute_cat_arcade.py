@@ -18,10 +18,11 @@ class Cat:
         self.texture = arcade.load_texture("cat_icon.png")
 
     def update(self):
-        """Move every 5 frames, staying inside the grid."""
+        """Move every n frames, staying inside the grid."""
+        n = 5
         self.move_timer += 1
 
-        if self.move_timer > 5:
+        if self.move_timer > n:
             self.move_timer = 0
             dr, dc = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
 
