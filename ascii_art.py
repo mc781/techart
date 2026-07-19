@@ -30,7 +30,7 @@ def pixels_to_ascii(image):
     ascii_chars = []
     BUCKET_SIZE = 25  # 256 / 10 ≈ 25
 
-    pixels = image.get_flattened_data()
+    pixels = image.getdata()
     for gray_value in pixels:
         ascii_chars.append(ASCII_CHARS[gray_value // BUCKET_SIZE])
     empty_separator = ""
