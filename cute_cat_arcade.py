@@ -1,6 +1,5 @@
 import arcade
 import random
-from arcade import Rect
 
 # --- Grid settings ---
 GRID_SIZE = 20
