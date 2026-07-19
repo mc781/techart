@@ -1,5 +1,6 @@
 import arcade
 import random
+from arcade import Rect
 
 # --- Grid settings ---
 GRID_SIZE = 20
@@ -15,6 +16,7 @@ class Cat:
         self.row = random.randint(0, GRID_SIZE - 1)
         self.col = random.randint(0, GRID_SIZE - 1)
         self.move_timer = 0
+        self.texture = arcade.load_texture("cat_icon.png")
 
     def update(self):
         """Move every 5 frames, staying inside the grid."""
@@ -37,10 +39,10 @@ class Cat:
         left = self.col * CELL_SIZE
         bottom = self.row * CELL_SIZE
         color = (255, 180, 200)  # Pink color for the cat
-        arcade.draw_lbwh_rectangle_filled(left, bottom, CELL_SIZE, CELL_SIZE, color)
+ #       arcade.draw_lbwh_rectangle_filled(left, bottom, CELL_SIZE, CELL_SIZE, color)
 
-
-
+        rect = arcade.LBWH(left, bottom, CELL_SIZE, CELL_SIZE)
+        arcade.draw_texture_rect(self.texture, rect, pixelated=True)
 
 class CatWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
