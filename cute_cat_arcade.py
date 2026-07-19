@@ -36,8 +36,9 @@ class Cat:
         """Draw the cat as a pink square in its current cell."""
         left = self.col * CELL_SIZE
         bottom = self.row * CELL_SIZE
+        color = (255, 180, 200)  # Pink color for the cat
+        arcade.draw_lbwh_rectangle_filled(left, bottom, CELL_SIZE, CELL_SIZE, color)
 
-        arcade.draw_lbwh_rectangle_filled(left, bottom, CELL_SIZE, CELL_SIZE, (255, 180, 200))
 
 
 
@@ -61,7 +62,8 @@ class CatWindow(arcade.Window):
             for c in range(GRID_SIZE):
                 left = c * CELL_SIZE
                 bottom = r * CELL_SIZE
-                arcade.draw_lbwh_rectangle_outline(left, bottom, CELL_SIZE, CELL_SIZE, (60, 60, 60))
+                color = (60, 60, 60)  # Dark gray for grid lines
+                arcade.draw_lbwh_rectangle_outline(left, bottom, CELL_SIZE, CELL_SIZE, color)
  
         # Draw the cat
         self.cat.draw()
