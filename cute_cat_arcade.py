@@ -1,6 +1,10 @@
 import arcade
 import random
 
+# Setup
+# pip install arcade
+# arcade documentation: https://api.arcade.academy/en/3.3.3/index.html
+
 # --- Grid settings ---
 GRID_SIZE = 20
 CELL_SIZE = 32
@@ -35,7 +39,7 @@ class Cat:
                 self.col = new_c
 
     def draw(self):
-        """Draw the cat as a pink square in its current cell."""
+        """Draw the cat as a pink square initially in its current cell."""
         left = self.col * CELL_SIZE
         bottom = self.row * CELL_SIZE
         color = (255, 180, 200)  # Pink color for the cat
