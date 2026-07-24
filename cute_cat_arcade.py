@@ -19,7 +19,7 @@ class Cat:
         self.row = random.randint(0, GRID_SIZE - 1)
         self.col = random.randint(0, GRID_SIZE - 1)
         self.move_timer = 0
-        self.texture = arcade.load_texture("cat_icon.png")
+        self.texture = arcade.load_texture("cute_penguin.png")
 
     def update(self):
         """Move every n frames, staying inside the grid."""
