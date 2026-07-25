@@ -22,6 +22,7 @@ class Cat:
         self.row = random.randint(0, GRID_SIZE - 1)
         self.col = random.randint(0, GRID_SIZE - 1)
         self.move_timer = 0
+        self.type = type
 
         if type == "cat":
             img = Image.open("cat_icon.png")
@@ -34,7 +35,11 @@ class Cat:
 
     def update(self):
         """Move every n frames, staying inside the grid."""
-        n = 1
+        if self.type == "cat":
+            n = 1
+        elif self.type == "penguin":
+            n = 5
+
         self.move_timer += 1
 
         if self.move_timer > n:
@@ -73,7 +78,7 @@ class CatWindow(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.M:
             self.player.volume = 0 if self.player.volume > 0 else 1
-            
+
     def on_update(self, delta_time: float):
         self.cat.update()
         self.cat2.update()
