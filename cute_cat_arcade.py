@@ -3,8 +3,10 @@ import random
 from PIL import Image
 
 # Setup
-# pip install arcade
-# arcade documentation: https://api.arcade.academy/en/3.3.3/index.html
+# > pip install arcade
+# References
+# - arcade documentation: https://api.arcade.academy/en/3.3.3/index.html
+# - melody maker: https://musiclab.chromeexperiments.com/Melody-Maker/
 
 # --- Grid settings ---
 GRID_SIZE = 20
@@ -65,6 +67,8 @@ class CatWindow(arcade.Window):
         self.cat = Cat()
         self.cat2 = Cat("penguin")
         self.background_color = (30, 30, 30)
+        self.music = arcade.Sound("game_sound.mp3")
+        self.player = self.music.play(loop=True)
 
     def on_update(self, delta_time: float):
         self.cat.update()
