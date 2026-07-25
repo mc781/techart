@@ -70,6 +70,10 @@ class CatWindow(arcade.Window):
         self.music = arcade.Sound("game_sound.mp3")
         self.player = self.music.play(loop=True)
 
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.M:
+            self.player.volume = 0 if self.player.volume > 0 else 1
+            
     def on_update(self, delta_time: float):
         self.cat.update()
         self.cat2.update()
