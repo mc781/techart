@@ -10,7 +10,7 @@ from PIL import Image
 
 # --- Grid settings ---
 GRID_SIZE = 20
-CELL_SIZE = 32
+CELL_SIZE = 48
 WIDTH = GRID_SIZE * CELL_SIZE
 HEIGHT = GRID_SIZE * CELL_SIZE
 
@@ -24,8 +24,9 @@ class Animal:
         self.move_timer = 0
         self.type = type
 
+        if type == "me":
+            self.texture = arcade.load_texture("me.png")
         if type == "cat":
-            img = Image.open("cat_icon.png")
             self.texture = arcade.load_texture("cat_icon.png")
         elif type == "penguin":
             img = Image.open("cute_penguin.png")
@@ -35,10 +36,13 @@ class Animal:
 
     def update(self):
         """Move every n frames, staying inside the grid."""
+        n = 1
         if self.type == "cat":
             n = 1
         elif self.type == "penguin":
             n = 5
+        elif self.type == "me":
+            n = 20
 
         self.move_timer += 1
 
@@ -71,17 +75,20 @@ class PlayWindow(arcade.Window):
         super().__init__(WIDTH, HEIGHT, "Arcade Cat Grid")
         self.cat = Animal("cat")
         self.penguin = Animal("penguin")
+        self.me = Animal("me")
+
         self.background_color = (30, 30, 30)
         self.music = arcade.Sound("game_sound.mp3")
-        self.player = self.music.play(loop=True)
+        self.music_player = self.music.play(loop=True)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.M:
-            self.player.volume = 0 if self.player.volume > 0 else 1
+            self.music_player.volume = 0 if self.music_player.volume > 0 else 1
 
     def on_update(self, delta_time: float):
         self.cat.update()
         self.penguin.update()
+        self.me.update()
 
     def on_draw(self):
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
@@ -98,6 +105,7 @@ class PlayWindow(arcade.Window):
         # Draw the cat
         self.cat.draw()
         self.penguin.draw()
+        self.me.draw()
 
 
 if __name__ == "__main__":
