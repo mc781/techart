@@ -15,8 +15,8 @@ WIDTH = GRID_SIZE * CELL_SIZE
 HEIGHT = GRID_SIZE * CELL_SIZE
 
 
-class Cat:
-    """A wandering cat that moves randomly on a 20x20 grid."""
+class Animal:
+    """A wandering animal that moves randomly on a 20x20 grid."""
 
     def __init__(self, type="cat"):
         self.row = random.randint(0, GRID_SIZE - 1)
@@ -64,13 +64,13 @@ class Cat:
         rect = arcade.LBWH(left, bottom, CELL_SIZE, CELL_SIZE)
         arcade.draw_texture_rect(self.texture, rect, pixelated=True)
 
-class CatWindow(arcade.Window):
+class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
 
     def __init__(self):
         super().__init__(WIDTH, HEIGHT, "Arcade Cat Grid")
-        self.cat = Cat()
-        self.cat2 = Cat("penguin")
+        self.cat = Animal("cat")
+        self.penguin = Animal("penguin")
         self.background_color = (30, 30, 30)
         self.music = arcade.Sound("game_sound.mp3")
         self.player = self.music.play(loop=True)
@@ -81,7 +81,7 @@ class CatWindow(arcade.Window):
 
     def on_update(self, delta_time: float):
         self.cat.update()
-        self.cat2.update()
+        self.penguin.update()
 
     def on_draw(self):
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
@@ -97,9 +97,9 @@ class CatWindow(arcade.Window):
  
         # Draw the cat
         self.cat.draw()
-        self.cat2.draw()
+        self.penguin.draw()
 
 
 if __name__ == "__main__":
-    CatWindow()
+    PlayWindow()
     arcade.run()
