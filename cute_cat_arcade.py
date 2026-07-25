@@ -1,5 +1,6 @@
 import arcade
 import random
+from PIL import Image
 
 # Setup
 # pip install arcade
@@ -15,15 +16,23 @@ HEIGHT = GRID_SIZE * CELL_SIZE
 class Cat:
     """A wandering cat that moves randomly on a 20x20 grid."""
 
-    def __init__(self):
+    def __init__(self, type="cat"):
         self.row = random.randint(0, GRID_SIZE - 1)
         self.col = random.randint(0, GRID_SIZE - 1)
         self.move_timer = 0
-        self.texture = arcade.load_texture("cute_penguin.png")
+
+        if type == "cat":
+            img = Image.open("cat_icon.png")
+            self.texture = arcade.load_texture("cat_icon.png")
+        elif type == "penguin":
+            img = Image.open("cute_penguin.png")
+            # Resize image smaller before creating the texture
+            img = img.resize((CELL_SIZE, CELL_SIZE))
+            self.texture = arcade.Texture(img)  
 
     def update(self):
         """Move every n frames, staying inside the grid."""
-        n = 5
+        n = 1
         self.move_timer += 1
 
         if self.move_timer > n:
@@ -42,7 +51,7 @@ class Cat:
         """Draw the cat as a pink square initially in its current cell."""
         left = self.col * CELL_SIZE
         bottom = self.row * CELL_SIZE
-        color = (255, 180, 200)  # Pink color for the cat
+        color = (255, 180, 200)  # Pink-color box for the cat
  #       arcade.draw_lbwh_rectangle_filled(left, bottom, CELL_SIZE, CELL_SIZE, color)
 
         rect = arcade.LBWH(left, bottom, CELL_SIZE, CELL_SIZE)
@@ -54,25 +63,28 @@ class CatWindow(arcade.Window):
     def __init__(self):
         super().__init__(WIDTH, HEIGHT, "Arcade Cat Grid")
         self.cat = Cat()
+        self.cat2 = Cat("penguin")
         self.background_color = (30, 30, 30)
 
     def on_update(self, delta_time: float):
         self.cat.update()
+        self.cat2.update()
 
     def on_draw(self):
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
         self.clear(self.background_color)
 
-        # Draw grid lines
+        # Draw grid lines as rectagle shapes(slow)
         for r in range(GRID_SIZE):
             for c in range(GRID_SIZE):
                 left = c * CELL_SIZE
                 bottom = r * CELL_SIZE
                 color = (60, 60, 60)  # Dark gray for grid lines
-                arcade.draw_lbwh_rectangle_outline(left, bottom, CELL_SIZE, CELL_SIZE, color)
+                arcade.draw_lbwh_rectangle_outline(left, bottom, CELL_SIZE, CELL_SIZE, color) #
  
         # Draw the cat
         self.cat.draw()
+        self.cat2.draw()
 
 
 if __name__ == "__main__":
