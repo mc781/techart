@@ -24,6 +24,9 @@ class Animal:
         self.move_timer = 0
         self.type = type
 
+        self.sound_hit = arcade.Sound("magic-teleport.wav")
+        self.sound_step = arcade.Sound("step-grass.wav")
+
         if type == "me":
             self.texture = arcade.load_texture("me.png")
             self.dr = 0
@@ -73,6 +76,9 @@ class Animal:
 
         rect = arcade.LBWH(left, bottom, CELL_SIZE, CELL_SIZE)
         arcade.draw_texture_rect(self.texture, rect, pixelated=True)
+        if self.type == "me":
+            if self.dr != 0 or self.dc != 0:
+                self.sound_step.play()
 
 class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
@@ -84,7 +90,7 @@ class PlayWindow(arcade.Window):
 
         self.background_color = (30, 30, 30)
         self.music = arcade.Sound("game_sound.mp3")
-        self.music_player = self.music.play(loop=True)
+        self.music_player = self.music.play(volume=0.5, loop=True)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.M:
@@ -126,6 +132,11 @@ class PlayWindow(arcade.Window):
         self.cat.draw()
         self.penguin.draw()
         self.me.draw()
+
+        if self.cat.row == self.me.row and self.cat.col == self.me.col:
+            self.cat.sound_hit.play()
+        if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
+            self.penguin.sound_hit.play()    
 
 
 if __name__ == "__main__":
