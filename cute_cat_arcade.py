@@ -26,6 +26,8 @@ class Animal:
 
         if type == "me":
             self.texture = arcade.load_texture("me.png")
+            self.dr = 0
+            self.dc = 0 
         if type == "cat":
             self.texture = arcade.load_texture("cat_icon.png")
         elif type == "penguin":
@@ -38,17 +40,21 @@ class Animal:
         """Move every n frames, staying inside the grid."""
         n = 1
         if self.type == "cat":
-            n = 1
+            n = 2
         elif self.type == "penguin":
             n = 5
         elif self.type == "me":
-            n = 20
+            n = 1
 
         self.move_timer += 1
 
         if self.move_timer > n:
             self.move_timer = 0
-            dr, dc = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
+            if self.type == "me":
+                dr = self.dr
+                dc = self.dc
+            else:
+                dr, dc = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
 
             new_r = self.row + dr
             new_c = self.col + dc
@@ -70,12 +76,14 @@ class Animal:
 
 class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
-
     def __init__(self):
-        super().__init__(WIDTH, HEIGHT, "Arcade Cat Grid")
+        super().__init__(WIDTH, HEIGHT, "Arcade Grid")
         self.cat = Animal("cat")
         self.penguin = Animal("penguin")
         self.me = Animal("me")
+
+        self.dr = 0
+        self.dc = 0
 
         self.background_color = (30, 30, 30)
         self.music = arcade.Sound("game_sound.mp3")
@@ -84,6 +92,21 @@ class PlayWindow(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.M:
             self.music_player.volume = 0 if self.music_player.volume > 0 else 1
+
+        if key == arcade.key.W:
+            self.me.dr = 1     # up
+        elif key == arcade.key.S:
+            self.me.dr = -1    # down
+        elif key == arcade.key.A:
+            self.me.dc = -1    # left
+        elif key == arcade.key.D:
+            self.me.dc = 1     # right
+
+    def on_key_release(self, key, modifiers):
+        if key in (arcade.key.W, arcade.key.S):
+            self.me.dr = 0
+        if key in (arcade.key.A, arcade.key.D):
+            self.me.dc = 0
 
     def on_update(self, delta_time: float):
         self.cat.update()
