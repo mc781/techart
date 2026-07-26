@@ -82,9 +82,6 @@ class PlayWindow(arcade.Window):
         self.penguin = Animal("penguin")
         self.me = Animal("me")
 
-        self.dr = 0
-        self.dc = 0
-
         self.background_color = (30, 30, 30)
         self.music = arcade.Sound("game_sound.mp3")
         self.music_player = self.music.play(loop=True)
