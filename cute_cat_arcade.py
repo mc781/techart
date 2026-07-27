@@ -14,13 +14,14 @@ CELL_SIZE = 48
 WIDTH = GRID_SIZE * CELL_SIZE
 HEIGHT = GRID_SIZE * CELL_SIZE
 
-
 class Animal:
     """A wandering animal that moves randomly on a 20x20 grid."""
 
     def __init__(self, type="cat"):
         self.row = random.randint(0, GRID_SIZE - 1)
         self.col = random.randint(0, GRID_SIZE - 1)
+        self.dr = 0
+        self.dc = 0 
         self.move_timer = 0
         self.type = type
 
@@ -29,8 +30,6 @@ class Animal:
 
         if type == "me":
             self.texture = arcade.load_texture("me.png")
-            self.dr = 0
-            self.dc = 0 
         if type == "cat":
             self.texture = arcade.load_texture("cat_icon.png")
         elif type == "penguin":
@@ -53,14 +52,11 @@ class Animal:
 
         if self.move_timer > n:
             self.move_timer = 0
-            if self.type == "me":
-                dr = self.dr
-                dc = self.dc
-            else:
-                dr, dc = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
+            if self.type != "me":
+                self.dr, self.dc = random.choice([(1, 0), (-1, 0), (0, 1), (0, -1)])
 
-            new_r = self.row + dr
-            new_c = self.col + dc
+            new_r = self.row + self.dr
+            new_c = self.col + self.dc
 
             if 0 <= new_r < GRID_SIZE:
                 self.row = new_r
