@@ -1,3 +1,5 @@
+from turtle import color
+
 import arcade
 import random
 from PIL import Image
@@ -13,6 +15,34 @@ GRID_SIZE = 20
 CELL_SIZE = 48
 WIDTH = GRID_SIZE * CELL_SIZE
 HEIGHT = GRID_SIZE * CELL_SIZE
+
+class Backdrop:
+    """A backdrop that fills the entire window with a color."""
+    def __init__(self, type):
+        self.sand_color = (194, 178, 128)
+        self.grass_color = (34, 139, 34)
+        self.ocean_color = (0, 105, 148)
+        self.sky_color = (135, 206, 235)
+
+        if type == "sand":
+            self.color = self.sand_color
+            self.bot = 0
+            self.top = HEIGHT/2
+            self.text = "Seashell"
+        elif type == "ocean":
+            self.color = self.ocean_color
+            self.bot = HEIGHT/2
+            self.top = 3 * HEIGHT/4
+            self.text = "Boat"
+        elif type == "sky":
+            self.color = self.sky_color
+            self.bot = 3 * HEIGHT/4
+            self.top = HEIGHT
+            self.text = "Seagull"
+
+    def draw(self):
+        arcade.draw_lbwh_rectangle_filled(0, self.bot, WIDTH, self.top, self.color)
+        arcade.draw_text(self.text, WIDTH/2, self.top - 30, arcade.color.WHITE, 20, anchor_x="center")
 
 class Animal:
     """A wandering animal that moves randomly on a 20x20 grid."""
@@ -85,6 +115,11 @@ class PlayWindow(arcade.Window):
         self.me = Animal("me")
 
         self.background_color = (30, 30, 30)
+
+        self.backdrop_sand = Backdrop("sand")
+        self.backdrop_ocean = Backdrop("ocean")
+        self.backdrop_sky = Backdrop("sky")
+         
         self.music = arcade.Sound("game_sound.mp3")
         self.music_player = self.music.play(volume=0.5, loop=True)
 
@@ -115,7 +150,9 @@ class PlayWindow(arcade.Window):
     def on_draw(self):
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
         self.clear(self.background_color)
-
+        self.backdrop_sand.draw()
+        self.backdrop_ocean.draw()
+        self.backdrop_sky.draw()
         # Draw grid lines as rectagle shapes(slow)
         for r in range(GRID_SIZE):
             for c in range(GRID_SIZE):
