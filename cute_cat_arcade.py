@@ -1,3 +1,4 @@
+from time import sleep
 from turtle import color, left
 
 import arcade
@@ -56,6 +57,7 @@ class Animal:
         self.type = type
         self.energy = 100
         self.energy_max = 100
+        self.energy_min = 10
 
         self.sound_hit = arcade.Sound("magic-teleport.wav")
         self.sound_step = arcade.Sound("step-grass.wav")
@@ -83,7 +85,7 @@ class Animal:
         self.move_timer += 1
 
         drain_rate = 0.01 if self.type == "me" else 0.1
-        self.energy = max(10, self.energy - drain_rate)  # Decrease energy over time, min 10
+        self.energy = max(self.energy_min, self.energy - drain_rate)  # Decrease energy over time
 
         if self.move_timer > n:
             self.move_timer = 0
@@ -172,7 +174,7 @@ class PlayWindow(arcade.Window):
         self.cat.update()
         self.penguin.update()
         self.me.update()
-        
+
         # Refuel the cat and penguin if "me" is on the same cell feeding them
         if self.cat.row == self.me.row and self.cat.col == self.me.col:
             self.cat.energy = 100
@@ -180,6 +182,7 @@ class PlayWindow(arcade.Window):
             self.penguin.energy = 100
 
     def on_draw(self):
+
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
         self.clear(self.background_color)
         self.backdrop_sand.draw()
@@ -204,8 +207,13 @@ class PlayWindow(arcade.Window):
         if self.cat.row == self.me.row and self.cat.col == self.me.col:
             self.cat.sound_hit.play()
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
-            self.penguin.sound_hit.play()    
+            self.penguin.sound_hit.play()
+            
+        if self.cat.energy <= 10 or self.penguin.energy <= 10:    
+            self.music_player.pause()
+            arcade.draw_text("GAME\nOVER", WIDTH//2, HEIGHT//2, arcade.color.RED, CELL_SIZE*2, anchor_x="center", anchor_y="center", bold=True, italic=True, font_name="Arial")
 
+        
 if __name__ == "__main__":
     PlayWindow()
     arcade.run()
