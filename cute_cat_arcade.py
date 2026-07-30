@@ -172,7 +172,12 @@ class PlayWindow(arcade.Window):
         self.cat.update()
         self.penguin.update()
         self.me.update()
-
+        
+        # Refuel the cat and penguin if "me" is on the same cell feeding them
+        if self.cat.row == self.me.row and self.cat.col == self.me.col:
+            self.cat.energy = 100
+        if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
+            self.penguin.energy = 100
 
     def on_draw(self):
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
