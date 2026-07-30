@@ -1,4 +1,4 @@
-from turtle import color
+from turtle import color, left
 
 import arcade
 import random
@@ -54,6 +54,8 @@ class Animal:
         self.dc = 0 
         self.move_timer = 0
         self.type = type
+        self.energy = 100
+        self.energy_max = 100
 
         self.sound_hit = arcade.Sound("magic-teleport.wav")
         self.sound_step = arcade.Sound("step-grass.wav")
@@ -80,6 +82,9 @@ class Animal:
 
         self.move_timer += 1
 
+        drain_rate = 0.01 if self.type == "me" else 0.1
+        self.energy = max(10, self.energy - drain_rate)  # Decrease energy over time, min 10
+
         if self.move_timer > n:
             self.move_timer = 0
             if self.type != "me":
@@ -102,9 +107,30 @@ class Animal:
 
         rect = arcade.LBWH(left, bottom, CELL_SIZE, CELL_SIZE)
         arcade.draw_texture_rect(self.texture, rect, pixelated=True)
+
+        # Play a sound when "me" is moving  
         if self.type == "me":
             if self.dr != 0 or self.dc != 0:
                 self.sound_step.play()
+
+def draw_energy_bar(cat):
+    # Energy ratio
+    ratio = cat.energy / cat.energy_max
+
+    # Color: green → red
+    r = int((1 - ratio) * 255)
+    g = int(ratio * 255)
+    color = (r, g, 0, 200)  # RGBA with alpha for transparency
+
+    bar_width = CELL_SIZE * ratio
+    bar_height = 6
+
+    # Bar LBWH position (at top of cell)
+    bar_left = cat.col * CELL_SIZE
+    bar_bottom = cat.row * CELL_SIZE + (CELL_SIZE - bar_height)
+    
+    arcade.draw_lbwh_rectangle_filled(bar_left, bar_bottom, bar_width, bar_height, color)
+
 
 class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
@@ -147,6 +173,7 @@ class PlayWindow(arcade.Window):
         self.penguin.update()
         self.me.update()
 
+
     def on_draw(self):
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
         self.clear(self.background_color)
@@ -165,12 +192,14 @@ class PlayWindow(arcade.Window):
         self.cat.draw()
         self.penguin.draw()
         self.me.draw()
+        draw_energy_bar(self.cat)
+        draw_energy_bar(self.penguin)
+        draw_energy_bar(self.me)
 
         if self.cat.row == self.me.row and self.cat.col == self.me.col:
             self.cat.sound_hit.play()
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
             self.penguin.sound_hit.play()    
-
 
 if __name__ == "__main__":
     PlayWindow()
