@@ -151,7 +151,23 @@ class PlayWindow(arcade.Window):
         self.music = arcade.Sound("game_sound.mp3")
         self.music_player = self.music.play(volume=0.5, loop=True)
 
+        self.game_over = False
+
+    def reset_game(self):
+        self.game_over = False
+        self.music_player.play()
+        self.cat.energy = 100
+        self.penguin.energy = 100
+        self.me.energy = 100   
+
     def on_key_press(self, key, modifiers):
+
+        if key == arcade.key.ESCAPE:
+            arcade.exit()
+        if key == arcade.key.R:
+            if self.game_over:
+                self.reset_game()
+
         if key == arcade.key.M:
             self.music_player.volume = 0 if self.music_player.volume > 0 else 1
 
@@ -171,6 +187,9 @@ class PlayWindow(arcade.Window):
             self.me.dc = 0
 
     def on_update(self, delta_time: float):
+        if self.game_over:
+            return
+        
         self.cat.update()
         self.penguin.update()
         self.me.update()
@@ -209,9 +228,11 @@ class PlayWindow(arcade.Window):
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
             self.penguin.sound_hit.play()
             
-        if self.cat.energy <= 10 or self.penguin.energy <= 10:    
+        if self.cat.energy <= 10 or self.penguin.energy <= 10:
+            self.game_over = True    
             self.music_player.pause()
-            arcade.draw_text("GAME\nOVER", WIDTH//2, HEIGHT//2, arcade.color.RED, CELL_SIZE*2, anchor_x="center", anchor_y="center", bold=True, italic=True, font_name="Arial")
+            arcade.draw_lbwh_rectangle_filled(0, 0, WIDTH, HEIGHT, (0, 0, 0, 180))  # Semi-transparent overlay
+            arcade.draw_text("GAME OVER", WIDTH//2, HEIGHT//2, arcade.color.RED, CELL_SIZE*2, anchor_x="center", anchor_y="center", bold=True, italic=True, font_name="Arial")
 
         
 if __name__ == "__main__":
