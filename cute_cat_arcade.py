@@ -150,6 +150,7 @@ class PlayWindow(arcade.Window):
          
         self.music = arcade.Sound("game_sound.mp3")
         self.music_player = self.music.play(volume=0.5, loop=True)
+        self.gameover_sound = arcade.Sound("gameover_sound.mp3")
 
         self.game_over = False
 
@@ -200,6 +201,10 @@ class PlayWindow(arcade.Window):
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
             self.penguin.energy = 100
 
+        if self.cat.energy <= 10 or self.penguin.energy <= 10:
+            self.game_over = True
+            self.gameover_sound.play()
+
     def on_draw(self):
 
         # Clear the screen (Arcade 3.3.3+ uses clear(), not start_render())
@@ -228,8 +233,7 @@ class PlayWindow(arcade.Window):
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
             self.penguin.sound_hit.play()
             
-        if self.cat.energy <= 10 or self.penguin.energy <= 10:
-            self.game_over = True    
+        if self.game_over:    
             self.music_player.pause()
             arcade.draw_lbwh_rectangle_filled(0, 0, WIDTH, HEIGHT, (0, 0, 0, 180))  # Semi-transparent overlay
             arcade.draw_text("GAME OVER", WIDTH//2, HEIGHT//2, arcade.color.RED, CELL_SIZE*2, anchor_x="center", anchor_y="center", bold=True, italic=True, font_name="Arial")
