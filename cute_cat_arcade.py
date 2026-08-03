@@ -1,6 +1,3 @@
-from time import sleep
-from turtle import color, left
-
 import arcade
 import random
 from PIL import Image
