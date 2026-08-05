@@ -106,29 +106,30 @@ class Animal:
 
         rect = arcade.LBWH(left, bottom, CELL_SIZE, CELL_SIZE)
         arcade.draw_texture_rect(self.texture, rect, pixelated=True)
+        self.draw_energy_bar()
 
         # Play a sound when "me" is moving  
         if self.type == "me":
             if self.dr != 0 or self.dc != 0:
                 self.sound_step.play()
 
-def draw_energy_bar(cat):
-    # Energy ratio
-    ratio = cat.energy / cat.energy_max
+    def draw_energy_bar(self):
+        # Energy ratio
+        ratio = self.energy / self.energy_max
 
-    # Color: green → red
-    r = int((1 - ratio) * 255)
-    g = int(ratio * 255)
-    color = (r, g, 0, 200)  # RGBA with alpha for transparency
+        # Color: green → red
+        r = int((1 - ratio) * 255)
+        g = int(ratio * 255)
+        color = (r, g, 0, 200)  # RGBA with alpha for transparency
 
-    bar_width = CELL_SIZE * ratio
-    bar_height = 6
+        bar_width = CELL_SIZE * ratio
+        bar_height = 6
 
-    # Bar LBWH position (at top of cell)
-    bar_left = cat.col * CELL_SIZE
-    bar_bottom = cat.row * CELL_SIZE + (CELL_SIZE - bar_height)
-    
-    arcade.draw_lbwh_rectangle_filled(bar_left, bar_bottom, bar_width, bar_height, color)
+        # Bar LBWH position (at top of cell)
+        bar_left = self.col * CELL_SIZE
+        bar_bottom = self.row * CELL_SIZE + (CELL_SIZE - bar_height)
+        
+        arcade.draw_lbwh_rectangle_filled(bar_left, bar_bottom, bar_width, bar_height, color)
 
 
 class PlayWindow(arcade.Window):
@@ -224,11 +225,9 @@ class PlayWindow(arcade.Window):
         # Draw the cat
         for cat in self.cats:
             cat.draw()
-            draw_energy_bar(cat)
         self.penguin.draw()
-        draw_energy_bar(self.penguin)
         self.me.draw()
-        draw_energy_bar(self.me)
+
 
         for cat in self.cats:
             if cat.row == self.me.row and cat.col == self.me.col:
