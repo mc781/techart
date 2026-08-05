@@ -157,9 +157,9 @@ class PlayWindow(arcade.Window):
         self.game_over = False
         self.music_player.play()
         for cat in self.cats:
-            cat.energy = 100
-        self.penguin.energy = 100
-        self.me.energy = 100   
+            cat.energy = cat.energy_max
+        self.penguin.energy = self.penguin.energy_max
+        self.me.energy = self.me.energy_max   
 
     def on_key_press(self, key, modifiers):
 
@@ -199,11 +199,11 @@ class PlayWindow(arcade.Window):
         # Refuel the cat and penguin if "me" is on the same cell feeding them
         for cat in self.cats:
             if cat.row == self.me.row and cat.col == self.me.col:
-                cat.energy = 100
+                cat.energy = cat.energy_max
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
-            self.penguin.energy = 100
+            self.penguin.energy = self.penguin.energy_max
 
-        if any(cat.energy <= 10 for cat in self.cats) or self.penguin.energy <= 10:
+        if any(cat.energy <= cat.energy_min for cat in self.cats) or self.penguin.energy <= self.penguin.energy_min:
             self.game_over = True
             self.gameover_sound.play()
 
