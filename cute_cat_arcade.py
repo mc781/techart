@@ -136,7 +136,7 @@ class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
     def __init__(self):
         super().__init__(WIDTH, HEIGHT, "Arcade Grid")
-        n_cats = 3
+        n_cats = 10
         self.cats = [Animal("cat") for _ in range(n_cats)]
         self.penguin = Animal("penguin")
         self.me = Animal("me")
