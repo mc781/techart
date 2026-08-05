@@ -135,7 +135,8 @@ class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
     def __init__(self):
         super().__init__(WIDTH, HEIGHT, "Arcade Grid")
-        self.cat = Animal("cat")
+        n_cats = 3
+        self.cats = [Animal("cat") for _ in range(n_cats)]
         self.penguin = Animal("penguin")
         self.me = Animal("me")
 
@@ -154,7 +155,8 @@ class PlayWindow(arcade.Window):
     def reset_game(self):
         self.game_over = False
         self.music_player.play()
-        self.cat.energy = 100
+        for cat in self.cats:
+            cat.energy = 100
         self.penguin.energy = 100
         self.me.energy = 100   
 
@@ -187,18 +189,20 @@ class PlayWindow(arcade.Window):
     def on_update(self, delta_time: float):
         if self.game_over:
             return
-        
-        self.cat.update()
+
+        for cat in self.cats:
+            cat.update()           
         self.penguin.update()
         self.me.update()
 
         # Refuel the cat and penguin if "me" is on the same cell feeding them
-        if self.cat.row == self.me.row and self.cat.col == self.me.col:
-            self.cat.energy = 100
+        for cat in self.cats:
+            if cat.row == self.me.row and cat.col == self.me.col:
+                cat.energy = 100
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
             self.penguin.energy = 100
 
-        if self.cat.energy <= 10 or self.penguin.energy <= 10:
+        if any(cat.energy <= 10 for cat in self.cats) or self.penguin.energy <= 10:
             self.game_over = True
             self.gameover_sound.play()
 
@@ -218,15 +222,17 @@ class PlayWindow(arcade.Window):
                 arcade.draw_lbwh_rectangle_outline(left, bottom, CELL_SIZE, CELL_SIZE, color) #
  
         # Draw the cat
-        self.cat.draw()
+        for cat in self.cats:
+            cat.draw()
+            draw_energy_bar(cat)
         self.penguin.draw()
-        self.me.draw()
-        draw_energy_bar(self.cat)
         draw_energy_bar(self.penguin)
+        self.me.draw()
         draw_energy_bar(self.me)
 
-        if self.cat.row == self.me.row and self.cat.col == self.me.col:
-            self.cat.sound_hit.play()
+        for cat in self.cats:
+            if cat.row == self.me.row and cat.col == self.me.col:
+                cat.sound_hit.play()
         if self.penguin.row == self.me.row and self.penguin.col == self.me.col:
             self.penguin.sound_hit.play()
             
