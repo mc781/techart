@@ -136,7 +136,7 @@ class PlayWindow(arcade.Window):
     """Main window showing the grid and the wandering cat."""
     def __init__(self):
         super().__init__(WIDTH, HEIGHT, "Arcade Grid")
-        n_cats = 10
+        n_cats = 20
         self.cats = [Animal("cat") for _ in range(n_cats)]
         self.penguin = Animal("penguin")
         self.me = Animal("me")
@@ -147,7 +147,7 @@ class PlayWindow(arcade.Window):
         self.backdrop_ocean = Backdrop("ocean")
         self.backdrop_sky = Backdrop("sky")
          
-        self.music = arcade.Sound("game_sound.mp3")
+        self.music = arcade.Sound("game_jojo_adv.mp3")
         self.music_player = self.music.play(volume=0.5, loop=True)
         self.gameover_sound = arcade.Sound("gameover_sound.mp3")
 
